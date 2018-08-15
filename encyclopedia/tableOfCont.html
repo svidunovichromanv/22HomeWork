@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <style>
+        h1{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Оглавление</h1>
+    <ul>
+    </ul>
+<script>
+    const ul = document.body.getElementsByTagName("ul")[0];
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    $.get("tsconfig.json",
+        function (obj) {
+            const arr = obj.articles;
+            arr.sort((a,b)=>a.name>b.name?1:-1);
+            for (let i = 0; i < arr.length; i++){
+                const newLi = li.cloneNode();
+                const na = a.cloneNode();
+                na.href = `article.html${arr[i].id}`;
+                na.textContent = arr[i].name;
+                newLi.appendChild(na);
+                ul.appendChild(newLi);
+            }
+        });
+</script>
+</body>
+</html>

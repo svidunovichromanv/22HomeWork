@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <style>
+        ul{
+            float: left;
+            margin: 15px;
+        }
+        h1{
+            text-align: center;
+        }
+        main, aside{
+            text-align: justify;
+        }
+        address{
+            text-align: right;
+        }
+        ul{
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<ul>
+
+</ul>
+<div>
+    <h1></h1>
+    <main></main>
+    <aside></aside>
+    <address></address>
+</div>
+    <script>
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        const ul = document.body.getElementsByTagName("ul")[0];
+        const h1 = document.body.getElementsByTagName("h1")[0];
+
+        const main = document.body.getElementsByTagName("main")[0];
+
+        const aside = document.body.getElementsByTagName("aside")[0];
+
+        const address = document.body.getElementsByTagName("address")[0];
+        //let articles = [];
+        $.get("tsconfig.json",
+            function (obj) {const arr = obj.articles;
+                arr.sort((a,b)=>a.name>b.name?1:-1);
+                for (let i = 0; i < arr.length; i++){
+                    const newLi = li.cloneNode();
+                    const na = a.cloneNode();
+                    na.href = `article.html${arr[i].id}`;
+                    na.textContent = arr[i].name;
+                    newLi.appendChild(na);
+                    ul.appendChild(newLi);
+                }
+            });
+        /*{
+            "articles":[
+            {"name":"Арбуз","content":"Много текста на русском языке про ягоду августа","conclusion":"Поел-попил-умылся","author":"Любитель арбузов","id":"#1"},
+            {"name":"Апельсин","content":"Много текста на русском языке про оражевость","conclusion":"Зацццэшимся","author":"Любитель апельсинов","id":"#2"},
+            {"name":"Шкода","content":"Много текста на русском языке про ягоду марку","conclusion":"Просто гениально","author":"Владелец","id":"#3"},
+            {"name":"Фантазия","content":"Много текста на русском языке про что-то","conclusion":"Эм..","author":"Кто-то","id":"#4"},
+            {"name":"Лак","content":"Много текста на русском языке про лак","conclusion":"Сохранит краску","author":"Токсикоман","id":"#5"},
+            {"name":"Болт","content":"Много текста на русском языке про метизы","conclusion":"Положили тут","author":"Строитель","id":"#6"},
+            {"name":"Крокодил","content":"Уже не так много текста на русском языке про ящерицу","conclusion":"Кусь=бо-бо","author":"Я 3года","id":"#7"}
+        ]
+        }*/
+
+        function draw(id){
+            id = id.slice(1);
+            $.get(`${id}.json`,
+                function (obj) {
+                    h1.textContent=obj.name;
+                    main.textContent=obj.content;
+                    aside.textContent=obj.conclusion;
+                    address.textContent=obj.author;
+                });
+        }
+        draw(window.location.hash);
+        window.onhashchange = ()=>{draw(window.location.hash)};
+    </script>
+</body>
+</html>
