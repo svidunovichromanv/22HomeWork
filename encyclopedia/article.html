@@ -47,28 +47,18 @@
         const address = document.body.getElementsByTagName("address")[0];
         //let articles = [];
         $.get("tsconfig.json",
-            function (obj) {const arr = obj.articles;
+            function (obj) {
+                const arr = obj.articles;
                 arr.sort((a,b)=>a.name>b.name?1:-1);
                 for (let i = 0; i < arr.length; i++){
                     const newLi = li.cloneNode();
                     const na = a.cloneNode();
-                    na.href = `article.html${arr[i].id}`;
+                    na.href = `article.html${arr[i].id}`;//тут дописали хэш в наш href для тега a "#1"
                     na.textContent = arr[i].name;
                     newLi.appendChild(na);
                     ul.appendChild(newLi);
                 }
             });
-        /*{
-            "articles":[
-            {"name":"Арбуз","content":"Много текста на русском языке про ягоду августа","conclusion":"Поел-попил-умылся","author":"Любитель арбузов","id":"#1"},
-            {"name":"Апельсин","content":"Много текста на русском языке про оражевость","conclusion":"Зацццэшимся","author":"Любитель апельсинов","id":"#2"},
-            {"name":"Шкода","content":"Много текста на русском языке про ягоду марку","conclusion":"Просто гениально","author":"Владелец","id":"#3"},
-            {"name":"Фантазия","content":"Много текста на русском языке про что-то","conclusion":"Эм..","author":"Кто-то","id":"#4"},
-            {"name":"Лак","content":"Много текста на русском языке про лак","conclusion":"Сохранит краску","author":"Токсикоман","id":"#5"},
-            {"name":"Болт","content":"Много текста на русском языке про метизы","conclusion":"Положили тут","author":"Строитель","id":"#6"},
-            {"name":"Крокодил","content":"Уже не так много текста на русском языке про ящерицу","conclusion":"Кусь=бо-бо","author":"Я 3года","id":"#7"}
-        ]
-        }*/
 
         function draw(id){
             id = id.slice(1);

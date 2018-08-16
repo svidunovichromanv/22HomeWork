@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <title>test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
         'use strict';
         class HashStorage {
@@ -32,7 +33,7 @@
             };
         }
 
-        class TLocalStorage extends HashStorage {
+        /*class TLocalStorage extends HashStorage {
             addToLocal(storage, obj) {
                 let json = JSON.stringify(obj);
                 localStorage[storage] = json;
@@ -43,6 +44,50 @@
                 for (let key in temp) {
                     this[key] = temp[key];
                 }
+
+            }
+        }*/
+        const ajaxHandlerScript="http://fe.it-academy.by/AjaxStringStorage2.php";
+        class ServerStorage extends HashStorage {
+            addToServer(storage, obj) {
+                let json = JSON.stringify(obj);
+                let updatePassword=Math.random();
+                $.ajax( {
+                        url : ajaxHandlerScript, type : 'POST', cache : false, dataType:'json',
+                        data : { f : 'LOCKGET', n : storage, p : updatePassword },
+                        success : (callresult)=>{
+                            if ( callresult.error!=undefined )
+                                alert(callresult.error);
+                            else {
+                                $.ajax( {
+                                        url : ajaxHandlerScript, type : 'POST', cache : false, dataType:'json',
+                                        data : { f : 'UPDATE', n : storage, v : json, p : updatePassword },
+                                        success : updateReady, error : e=>alert(e)
+                                    }
+                                );
+                            }
+                        }, error : e=>alert(e)
+                    }
+                );
+            }
+
+            getFrom(storage) {
+                $.ajax(
+                    {
+                        url : ajaxHandlerScript, type : 'POST', cache : false, dataType:'json',
+                        data : { f : 'READ', n : storage },
+                        success : (callresult)=>{
+                            if ( callresult.error!=undefined )
+                                alert(callresult.error);
+                            else if ( callresult.result!="" ) {
+                                const temp = JSON.parse(callresult.result);
+                                for (let key in temp) {
+                                    this[key] = temp[key];
+                                }
+                            }
+                        }, error : e=>alert(e)
+                    }
+                );
 
             }
         }
